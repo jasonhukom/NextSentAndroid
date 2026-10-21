@@ -4,16 +4,47 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
+    <!-- Top Left Title: MainActivity -->
+    <TextView
+        android:id="@+id/textHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/title_main_activity"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Saved Message History -->
+    <ScrollView
+        android:id="@+id/scrollHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textHeader"
+        android:layout_above="@id/editText"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/textHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:textSize="16sp" />
+    </ScrollView>
+
+    <!-- Bottom Input Controls (RelativeLayout) -->
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/button"
         android:layout_alignParentBottom="true"
-        android:hint="Masukkan Pesan Anda"
-        android:text="Name" />
+        android:hint="@string/hint_enter_message"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/button"
@@ -22,6 +53,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:onClick="openSecondActivity"
-        android:text="SEND" />
+        android:text="@string/button_send" />
 
 </RelativeLayout>

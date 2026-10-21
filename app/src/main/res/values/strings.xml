@@ -4,7 +4,7 @@
     <string name="title_main_activity">MainActivity</string>
     <string name="title_second_activity">SecondActivity</string>
     <string name="button_send">SEND</string>
-    <string name="button_reply">REPLY</string>
+    <string name="button_kirim">Kirim</string>
     <string name="hint_enter_message">Masukkan Pesan Anda</string>
-    <string name="hint_enter_reply">Masukkan Balasan Anda</string>
+    <string name="hint_enter_reply">Ketik balasan...</string>
 </resources>

@@ -10,23 +10,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SecondActivity extends AppCompatActivity {
 
+    private EditText editTextReply;
+    private TextView textHistory;
+    private String historyText = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        TextView textMessage = findViewById(R.id.text_message);
-        EditText editTextReply = findViewById(R.id.editTextReply);
+        textHistory = findViewById(R.id.textHistory);
+        editTextReply = findViewById(R.id.editTextReply);
         Button buttonReply = findViewById(R.id.buttonReply);
 
-        // Menampilkan pesan dari Activity 1
-        String message = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-        if (message != null) {
-            textMessage.setText(message);
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(MainActivity.EXTRA_HISTORY)) {
+            String passedHistory = intent.getStringExtra(MainActivity.EXTRA_HISTORY);
+            if (passedHistory != null) {
+                historyText = passedHistory;
+                textHistory.setText(historyText);
+            }
         }
 
-        // Mengirim balasan ke Activity 1
         buttonReply.setOnClickListener(v -> {
             String reply = editTextReply.getText().toString().trim();
 
@@ -39,9 +44,16 @@ public class SecondActivity extends AppCompatActivity {
                 return;
             }
 
-            Intent intent = new Intent(SecondActivity.this, MainActivity.class);
-            intent.putExtra(MainActivity.EXTRA_MESSAGE, reply);
-            startActivity(intent);
+            if (!historyText.isEmpty()) {
+                historyText += "\n";
+            }
+            historyText += "SecondActivity: " + reply;
+            textHistory.setText(historyText);
+
+            Intent replyIntent = new Intent();
+            replyIntent.putExtra(MainActivity.EXTRA_HISTORY, historyText);
+            setResult(RESULT_OK, replyIntent);
+            finish();
         });
     }
 }

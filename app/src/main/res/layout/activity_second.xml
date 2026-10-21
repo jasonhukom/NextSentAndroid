@@ -4,24 +4,47 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".SecondActivity">
 
+    <!-- Top Left Title: SecondActivity -->
     <TextView
-        android:id="@+id/text_message"
+        android:id="@+id/textHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="6dp"
-        android:text="Pesan diterima" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/title_second_activity"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-    <!-- yang ditambahkan yang ini -->
+    <!-- Saved Message History -->
+    <ScrollView
+        android:id="@+id/scrollHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textHeader"
+        android:layout_above="@id/editTextReply"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/textHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:textSize="16sp" />
+    </ScrollView>
+
+    <!-- Bottom Input Controls (RelativeLayout) -->
     <EditText
         android:id="@+id/editTextReply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/buttonReply"
         android:layout_alignParentBottom="true"
-        android:hint="Ketik balasan..." />
+        android:hint="@string/hint_enter_reply"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/buttonReply"
@@ -29,6 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:text="Kirim" />
+        android:text="@string/button_kirim" />
 
 </RelativeLayout>
