@@ -2,51 +2,46 @@ package com.nextsent.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SecondActivity extends AppCompatActivity {
-
-    public static final String EXTRA_REPLY = "com.nextsent.android.REPLY";
-
-    private EditText editTextReply;
-    private TextView textViewMessageHistory;
-    private final StringBuilder messageHistory = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        textViewMessageHistory = findViewById(R.id.textViewMessageHistory);
-        editTextReply = findViewById(R.id.editTextReply);
+        TextView textMessage = findViewById(R.id.text_message);
+        EditText editTextReply = findViewById(R.id.editTextReply);
+        Button buttonReply = findViewById(R.id.buttonReply);
 
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(MainActivity.EXTRA_MESSAGE)) {
-            String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-            if (message != null && !message.isEmpty()) {
-                messageHistory.append("Received Message: ").append(message);
-                textViewMessageHistory.setText(messageHistory.toString());
-            }
+        // Menampilkan pesan dari Activity 1
+        String message = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
+
+        if (message != null) {
+            textMessage.setText(message);
         }
-    }
 
-    // Called when clicking REPLY (android:onClick="returnReply")
-    public void returnReply(View view) {
-        String reply = editTextReply.getText().toString().trim();
-        if (!reply.isEmpty()) {
-            if (messageHistory.length() > 0) {
-                messageHistory.append("\n");
+        // Mengirim balasan ke Activity 1
+        buttonReply.setOnClickListener(v -> {
+            String reply = editTextReply.getText().toString().trim();
+
+            if (reply.isEmpty()) {
+                Toast.makeText(
+                        SecondActivity.this,
+                        "Pesan tidak boleh kosong",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
             }
-            messageHistory.append("Sent Reply: ").append(reply);
-            textViewMessageHistory.setText(messageHistory.toString());
 
-            Intent replyIntent = new Intent();
-            replyIntent.putExtra(EXTRA_REPLY, reply);
-            setResult(RESULT_OK, replyIntent);
-            finish();
-        }
+            Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+            intent.putExtra(MainActivity.EXTRA_MESSAGE, reply);
+            startActivity(intent);
+        });
     }
 }

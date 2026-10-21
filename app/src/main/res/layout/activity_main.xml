@@ -1,50 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".MainActivity">
 
-    <!-- Top Left Title: MainActivity -->
-    <TextView
-        android:id="@+id/textViewHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/title_main_activity"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <!-- Saved Message History Area -->
-    <ScrollView
-        android:id="@+id/scrollViewHistory"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/textViewHeader"
-        android:layout_above="@id/editText"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
-
-        <TextView
-            android:id="@+id/textViewMessageHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="6dp"
-            android:textSize="16sp"
-            android:visibility="gone" />
-    </ScrollView>
-
-    <!-- Bottom Input Controls (RelativeLayout) -->
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/button"
         android:layout_alignParentBottom="true"
-        android:hint="@string/hint_enter_message"
-        android:inputType="text" />
+        android:hint="Masukkan Pesan Anda"
+        android:text="Name" />
 
     <Button
         android:id="@+id/button"
@@ -53,6 +22,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:onClick="openSecondActivity"
-        android:text="@string/button_send" />
+        android:text="SEND" />
 
 </RelativeLayout>

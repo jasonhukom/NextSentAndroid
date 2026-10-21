@@ -1,49 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".SecondActivity">
 
-    <!-- Top Left Title: SecondActivity -->
     <TextView
-        android:id="@+id/textViewHeaderSecond"
+        android:id="@+id/text_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/title_second_activity"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="6dp"
+        android:text="Pesan diterima" />
 
-    <!-- Saved Message History Area -->
-    <ScrollView
-        android:id="@+id/scrollViewHistorySecond"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/textViewHeaderSecond"
-        android:layout_above="@id/editTextReply"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
-
-        <TextView
-            android:id="@+id/textViewMessageHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="6dp"
-            android:textSize="16sp" />
-    </ScrollView>
-
-    <!-- Bottom Input Controls (RelativeLayout) -->
+    <!-- yang ditambahkan yang ini -->
     <EditText
         android:id="@+id/editTextReply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/buttonReply"
         android:layout_alignParentBottom="true"
-        android:hint="@string/hint_enter_reply"
-        android:inputType="text" />
+        android:hint="Ketik balasan..." />
 
     <Button
         android:id="@+id/buttonReply"
@@ -51,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:onClick="returnReply"
-        android:text="@string/button_reply" />
+        android:text="Kirim" />
 
 </RelativeLayout>
