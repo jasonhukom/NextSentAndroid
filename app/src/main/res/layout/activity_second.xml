@@ -6,48 +6,75 @@
     android:padding="16dp"
     tools:context=".SecondActivity">
 
-    <!-- Area for displaying Message received from MainActivity -->
-    <LinearLayout
-        android:id="@+id/layoutReceived"
+    <!-- Top Chat Header -->
+    <RelativeLayout
+        android:id="@+id/layoutChatHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical">
+        android:layout_alignParentTop="true">
 
         <TextView
-            android:id="@+id/textViewMessageHeader"
+            android:id="@+id/textChatHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_header_received"
-            android:textSize="16sp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/header_chat"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textViewMessage"
+        <!-- GO TO WEBSITE Implicit Intent Button -->
+        <Button
+            android:id="@+id/buttonWeb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:onClick="openWeb"
+            android:text="@string/button_open_web" />
+    </RelativeLayout>
 
-    <!-- RelativeLayout Bottom Input Controls matching Module screenshot -->
+    <!-- Facebook-style Chat Messages Scroll Area -->
+    <ScrollView
+        android:id="@+id/scrollViewChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutChatHeader"
+        android:layout_above="@id/editText"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:id="@+id/layoutMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textChatHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Input Controls (RelativeLayout) -->
     <EditText
-        android:id="@+id/editTextReply"
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/buttonReply"
+        android:layout_toLeftOf="@id/button"
         android:layout_alignParentBottom="true"
-        android:hint="@string/hint_enter_reply"
+        android:hint="@string/hint_enter_message"
         android:inputType="text" />
 
     <Button
-        android:id="@+id/buttonReply"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:onClick="returnReply"
-        android:text="@string/button_reply" />
+        android:onClick="sendMessage"
+        android:text="@string/button_send" />
 
 </RelativeLayout>

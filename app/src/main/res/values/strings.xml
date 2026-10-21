@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NextSent Android</string>
-    <string name="header_main">- NextSent -</string>
+    <string name="header_messages">NextSent - Messages</string>
+    <string name="header_chat">Chat</string>
     <string name="button_send">SEND</string>
-    <string name="button_reply">REPLY</string>
-    <string name="button_open_web">OPEN WEBSITE</string>
+    <string name="button_open_web">GO TO WEBSITE</string>
     <string name="hint_enter_message">Masukkan Pesan Anda</string>
-    <string name="hint_enter_reply">Masukkan Balasan Anda</string>
-    <string name="text_header_reply">Balasan Diterima:</string>
-    <string name="text_header_received">Pesan Diterima:</string>
+    <string name="text_last_message">Last message sent: </string>
 </resources>
