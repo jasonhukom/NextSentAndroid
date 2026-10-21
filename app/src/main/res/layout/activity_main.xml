@@ -6,35 +6,23 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <!-- Header -->
+    <!-- Top Left Title: MainActivity -->
     <TextView
         android:id="@+id/textViewHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/header_main"
-        android:textSize="22sp"
+        android:layout_alignParentLeft="true"
+        android:text="@string/title_main_activity"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
-    <!-- Open Web Implicit Intent Button -->
-    <Button
-        android:id="@+id/buttonWeb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewHeader"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:onClick="openWeb"
-        android:text="@string/button_open_web" />
-
-    <!-- Message History Display Area -->
+    <!-- Saved Message History Area -->
     <ScrollView
         android:id="@+id/scrollViewHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/buttonWeb"
+        android:layout_below="@id/textViewHeader"
         android:layout_above="@id/editText"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp">

@@ -1,7 +1,6 @@
 package com.nextsent.android;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editText;
     private TextView textViewMessageHistory;
-    private StringBuilder messageHistory = new StringBuilder();
+    private final StringBuilder messageHistory = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
             editText.setText("");
         }
-    }
-
-    // Called when clicking OPEN WEBSITE (android:onClick="openWeb")
-    public void openWeb(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("http://www.google.com"));
-        startActivity(intent);
     }
 
     // Receives returned reply data from SecondActivity

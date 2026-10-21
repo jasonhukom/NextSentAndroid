@@ -6,19 +6,18 @@
     android:padding="16dp"
     tools:context=".SecondActivity">
 
-    <!-- Header -->
+    <!-- Top Left Title: SecondActivity -->
     <TextView
         android:id="@+id/textViewHeaderSecond"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/header_second"
-        android:textSize="22sp"
+        android:layout_alignParentLeft="true"
+        android:text="@string/title_second_activity"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
-    <!-- Message History Display Area -->
+    <!-- Saved Message History Area -->
     <ScrollView
         android:id="@+id/scrollViewHistorySecond"
         android:layout_width="match_parent"
