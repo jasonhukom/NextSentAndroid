@@ -13,27 +13,58 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/header_messages"
+        android:layout_marginTop="16dp"
+        android:text="@string/header_main"
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <!-- Last message indicator -->
-    <TextView
-        android:id="@+id/textLastMessage"
-        android:layout_width="match_parent"
+    <!-- Open Web Implicit Intent Button -->
+    <Button
+        android:id="@+id/buttonWeb"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewHeader"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:textSize="14sp"
-        android:textStyle="italic"
-        android:visibility="gone" />
+        android:onClick="openWeb"
+        android:text="@string/button_open_web" />
 
-    <!-- List of People to Message -->
-    <ListView
-        android:id="@+id/listViewPeople"
+    <!-- Message History Display Area -->
+    <ScrollView
+        android:id="@+id/scrollViewHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textLastMessage"
-        android:layout_marginTop="16dp" />
+        android:layout_below="@id/buttonWeb"
+        android:layout_above="@id/editText"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/textViewMessageHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="6dp"
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </ScrollView>
+
+    <!-- Bottom Input Controls (RelativeLayout) -->
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/button"
+        android:layout_alignParentBottom="true"
+        android:hint="@string/hint_enter_message"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="openSecondActivity"
+        android:text="@string/button_send" />
 
 </RelativeLayout>

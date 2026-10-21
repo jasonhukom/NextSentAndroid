@@ -1,11 +1,9 @@
 package com.nextsent.android;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,60 +11,42 @@ public class SecondActivity extends AppCompatActivity {
 
     public static final String EXTRA_REPLY = "com.nextsent.android.REPLY";
 
-    private EditText editText;
-    private TextView textChatHeader;
-    private TextView textChatHistory;
-    private ScrollView scrollViewChat;
-    private String lastSentMessage = "";
+    private EditText editTextReply;
+    private TextView textViewMessageHistory;
+    private final StringBuilder messageHistory = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        textChatHeader = findViewById(R.id.textChatHeader);
-        textChatHistory = findViewById(R.id.textChatHistory);
-        scrollViewChat = findViewById(R.id.scrollViewChat);
-        editText = findViewById(R.id.editText);
+        textViewMessageHistory = findViewById(R.id.textViewMessageHistory);
+        editTextReply = findViewById(R.id.editTextReply);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(MainActivity.EXTRA_CONTACT)) {
-            String contactName = intent.getStringExtra(MainActivity.EXTRA_CONTACT);
-            if (contactName != null && !contactName.isEmpty()) {
-                textChatHeader.setText("Chat with " + contactName);
-                textChatHistory.append("System: Conversation started with " + contactName + "\n");
+        if (intent != null && intent.hasExtra(MainActivity.EXTRA_MESSAGE)) {
+            String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+            if (message != null && !message.isEmpty()) {
+                messageHistory.append("Received Message: ").append(message);
+                textViewMessageHistory.setText(messageHistory.toString());
             }
         }
     }
 
-    // Called when clicking SEND (android:onClick="sendMessage")
-    // Appends message on screen in real-time like Facebook Messages!
-    public void sendMessage(View view) {
-        String message = editText.getText().toString().trim();
-        if (!message.isEmpty()) {
-            lastSentMessage = message;
-            textChatHistory.append("\nYou: " + message);
-            editText.setText("");
+    // Called when clicking REPLY (android:onClick="returnReply")
+    public void returnReply(View view) {
+        String reply = editTextReply.getText().toString().trim();
+        if (!reply.isEmpty()) {
+            if (messageHistory.length() > 0) {
+                messageHistory.append("\n");
+            }
+            messageHistory.append("Sent Reply: ").append(reply);
+            textViewMessageHistory.setText(messageHistory.toString());
 
-            // Auto-scroll to bottom
-            scrollViewChat.post(new Runnable() {
-                @Override
-                public void run() {
-                    scrollViewChat.fullScroll(View.FOCUS_DOWN);
-                }
-            });
-
-            // Set result to return last message to MainActivity
             Intent replyIntent = new Intent();
-            replyIntent.putExtra(EXTRA_REPLY, lastSentMessage);
+            replyIntent.putExtra(EXTRA_REPLY, reply);
             setResult(RESULT_OK, replyIntent);
+            finish();
         }
-    }
-
-    // Called when clicking GO TO WEBSITE (android:onClick="openWeb")
-    public void openWeb(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("http://www.google.com"));
-        startActivity(intent);
     }
 }
