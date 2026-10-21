@@ -7,23 +7,56 @@
     android:padding="16dp"
     tools:context=".SecondActivity">
 
-    <!-- Top Left Title: SecondActivity -->
-    <TextView
-        android:id="@+id/textHeader"
-        android:layout_width="wrap_content"
+    <!-- Top Header Bar -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/title_second_activity"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/textHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/title_second_activity"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:checked="true" />
+
+            <ImageButton
+                android:id="@+id/buttonTheme"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Theme Toggle"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_moon" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <!-- Saved Message History -->
     <ScrollView
         android:id="@+id/scrollHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textHeader"
+        android:layout_below="@id/topBar"
         android:layout_above="@id/editTextReply"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp">
@@ -43,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/buttonReply"
         android:layout_alignParentBottom="true"
-        android:hint="@string/hint_enter_reply"
+        android:hint="@string/hint_enter_message"
         android:inputType="text" />
 
     <Button
@@ -52,6 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:onClick="returnReply"
         android:text="@string/button_kirim" />
 
 </RelativeLayout>

@@ -6,5 +6,4 @@
     <string name="button_send">SEND</string>
     <string name="button_kirim">Kirim</string>
     <string name="hint_enter_message">Masukkan Pesan Anda</string>
-    <string name="hint_enter_reply">Ketik balasan...</string>
 </resources>

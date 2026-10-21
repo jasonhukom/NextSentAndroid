@@ -3,9 +3,12 @@ package com.nextsent.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,15 +18,43 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editText;
     private TextView textHistory;
+    private ImageButton buttonTheme;
+    private SwitchCompat switchActivity;
     private String historyText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Apply persistent theme before setContentView
+        ThemeManager.applyTheme(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         editText = findViewById(R.id.editText);
         textHistory = findViewById(R.id.textHistory);
+        buttonTheme = findViewById(R.id.buttonTheme);
+        switchActivity = findViewById(R.id.switchActivity);
+
+        updateThemeIcon();
+
+        // Persistent theme toggle on button click
+        buttonTheme.setOnClickListener(v -> {
+            boolean isDark = ThemeManager.isDarkMode(MainActivity.this);
+            ThemeManager.setDarkMode(MainActivity.this, !isDark);
+            updateThemeIcon();
+        });
+
+        // Switch to SecondActivity when switch is toggled
+        switchActivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    intent.putExtra(EXTRA_HISTORY, historyText);
+                    startActivityForResult(intent, TEXT_REQUEST);
+                }
+            }
+        });
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_HISTORY)) {
@@ -35,10 +66,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void updateThemeIcon() {
+        if (ThemeManager.isDarkMode(this)) {
+            buttonTheme.setImageResource(R.drawable.ic_sun);
+        } else {
+            buttonTheme.setImageResource(R.drawable.ic_moon);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (switchActivity != null) {
+            switchActivity.setChecked(false);
+        }
+    }
+
+    // Called when clicking SEND (android:onClick="openSecondActivity")
     public void openSecondActivity(View view) {
         String input = editText.getText().toString().trim();
         if (!input.isEmpty()) {
-            if (!historyText.isEmpty()) {
+            if (historyText.length() > 0) {
                 historyText += "\n";
             }
             historyText += "MainActivity: " + input;
@@ -53,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Receives returned reply data from SecondActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
