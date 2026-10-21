@@ -1,13 +1,20 @@
-# NextSent Android - Complete Learning & Implementation Guide
+# NextSent Android
 
+<<<<<<< HEAD
 Welcome to **NextSent Android**! This repository serves as both a complete theoretical guide and a practical implementation project for **Module 1 (Activities & Intents)**, **Module 2 (Facebook-Style Two-Way Messaging Project)**, and **Module 3 (Implicit Intents & Intent Filters)**.
 
 The lecture slides documents are attached in [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf) and [`docs/Materi_Mobile_7.pdf`](docs/Materi_Mobile_7.pdf).
+=======
+A small Android learning project that demonstrates **Activities, Intents, and two-way message passing** through a simple, two-screen messaging experience.
 
----
+The project accompanies the *Activities & Intents* learning material in [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf).
+>>>>>>> c96a232c627c3639338edb7d3ac789aaf2397c82
 
-## 📑 Table of Contents
+## Overview
 
+NextSent is a learning-focused messaging demo built around two Android Activities. A user can send a message from the first screen, view it on the second screen, and return a conversation history to the first screen.
+
+<<<<<<< HEAD
 1. [MODULE 1: Activities & Intents (Comprehensive Theory)](#module-1-activities--intents-comprehensive-theory)
    - [1.1 What is an Activity? (Slides 1–6)](#11-what-is-an-activity-slides-16)
    - [1.2 4-Step Activity Creation Workflow (Slides 7–12)](#12-4-step-activity-creation-workflow-slides-712)
@@ -30,77 +37,115 @@ The lecture slides documents are attached in [`docs/Materi_Mobile_6.pdf`](docs/M
    - [3.6 Registering Apps to Receive Implicit Intents via Intent Filters (Slides 17–22)](#36-registering-apps-to-receive-implicit-intents-via-intent-filters-slides-1722)
 4. [Catatan Activity & Intent: Cara Activity 2 Mengirim Balasan ke Activity 1](#catatan-activity--intent-cara-activity-2-mengirim-balasan-ke-activity-1)
 5. [Codebase Reference & Build Guide](#codebase-reference--build-guide)
+=======
+The project also includes a persistent light/dark theme toggle.
+>>>>>>> c96a232c627c3639338edb7d3ac789aaf2397c82
 
----
+## Features
 
-# MODULE 1: Activities & Intents (Comprehensive Theory)
+- **Two-screen messaging flow** using `MainActivity` and `SecondActivity`.
+- **Explicit Intents** to navigate between Activities.
+- **Intent extras** to pass messages and conversation history.
+- **Activity results** to return updated conversation history to the calling Activity.
+- **Conversation history** displayed in the main screen.
+- **Persistent theme preference** with a light/dark mode toggle.
+- **Implicit Intent example** for opening a website, as covered in the learning material.
 
-### 1.1 What is an Activity? (Slides 1–6)
-- **Definition**: An **Activity** is a core app component that provides a window in which the application draws its user interface (UI).
-- **Structure**: Represents a single screen and single view hierarchy, implemented as a Java class extending `AppCompatActivity`.
-- **Purpose**: Handles user interactions such as button clicks, text entry, or login verification.
-- **Lifecycle**: Managed by the Android runtime through lifecycle callbacks:
-  ```
-  [Created] ➡️ [Started] ➡️ [Runs / Resumed] ➡️ [Paused] ➡️ [Stopped] ➡️ [Destroyed]
-  ```
-- **Main Activity**: The primary screen launched when tapping the app icon, registered in `AndroidManifest.xml` with:
-  ```xml
-  <intent-filter>
-      <action android:name="android.intent.action.MAIN" />
-      <category android:name="android.intent.category.LAUNCHER" />
-  </intent-filter>
-  ```
+> This is an educational demonstration, not a production messaging service. It does not provide network-based messaging between separate devices or users.
 
----
+## Concepts Demonstrated
 
-### 1.2 4-Step Activity Creation Workflow (Slides 7–12)
+| Concept | Purpose in the project |
+| --- | --- |
+| Android Activity | Represents each screen in the app |
+| Explicit Intent | Opens the second Activity from the first |
+| Intent extras | Transfers message text and conversation history |
+| Activity result | Returns updated history when the second Activity closes |
+| Implicit Intent | Requests that Android open a website |
+| Shared preferences | Stores the selected theme between launches |
 
+## How the Message Flow Works
+
+```text
+MainActivity
+    |
+    | Message + conversation history
+    | Explicit Intent and extras
+    v
+SecondActivity
+    |
+    | Updated conversation history
+    | Activity result
+    v
+MainActivity
 ```
-┌────────────────────┐     ┌─────────────────────┐     ┌──────────────────────┐     ┌───────────────────────┐
-│ 1. Create Layout   │ ──► │ 2. Create Java      │ ──► │ 3. Connect Layout    │ ──► │ 4. Declare Activity   │
-│    XML File        │     │    Activity Class   │     │    in onCreate()     │     │    in Manifest        │
-└────────────────────┘     └─────────────────────┘     └──────────────────────┘     └───────────────────────┘
+
+1. Enter a message on the main screen.
+2. Send it to the second screen.
+3. The second screen displays the message and supports the reply flow.
+4. Return to the main screen with the updated conversation history.
+
+## Project Structure
+
+Key files include:
+
+```text
+.
+├── app/
+│   └── src/main/
+│       ├── AndroidManifest.xml
+│       └── java/com/nextsent/android/
+│           ├── MainActivity.java
+│           ├── SecondActivity.java
+│           └── ThemeManager.java
+└── docs/
+    └── Materi_Mobile_6.pdf
 ```
 
-1. **Create XML Layout** (`res/layout/activity_main.xml`):
-   ```xml
-   <?xml version="1.0" encoding="utf-8"?>
-   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Let's Shop for Food!" />
-   </RelativeLayout>
+The repository may contain additional Android resources, layouts, icons, and Gradle configuration files.
+
+## Getting Started
+
+### Requirements
+
+- Android Studio
+- A compatible Android SDK installed through Android Studio
+- An Android emulator or a physical Android device
+- Git (optional, for cloning the repository)
+
+### Open and Run
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/jasonhukom/NextSentAndroid.git
    ```
 
-2. **Create Java Activity Class**:
-   ```java
-   public class MainActivity extends AppCompatActivity { ... }
-   ```
+2. Open the cloned project folder in Android Studio.
+3. Allow Android Studio to sync the Gradle project and install any required SDK components it requests.
+4. Select an emulator or connect an Android device with USB debugging enabled.
+5. Run the app using Android Studio's **Run** action.
 
-3. **Connect Layout in `onCreate()`**:
-   ```java
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_main);
-   }
-   ```
+The exact SDK and Gradle requirements are defined by the project's build configuration. Use the versions configured in the repository rather than guessing or changing them unnecessarily.
 
-4. **Declare in `AndroidManifest.xml`**:
-   ```xml
-   <activity android:name=".MainActivity" android:exported="true">
-       <intent-filter>
-           <action android:name="android.intent.action.MAIN" />
-           <category android:name="android.intent.category.LAUNCHER" />
-       </intent-filter>
-   </activity>
-   ```
+## Learning Resource
+
+- [Activities & Intents lecture material](docs/Materi_Mobile_6.pdf)
+- [Source code](https://github.com/jasonhukom/NextSentAndroid)
+
+## Scope and Limitations
+
+- The conversation is a local demonstration of passing data between Activities.
+- Messages are not sent over the internet and are not synchronized across devices.
+- The app is intended for Android development practice and classroom learning.
+
+## Author
+
+**Jason Hukom**
 
 ---
 
+<<<<<<< HEAD
 ### 1.3 What is an Intent? (Slides 13–14)
 
 An **Intent** is an asynchronous messaging object used to request an action from another app component or system service.
@@ -738,3 +783,6 @@ buttonReply.setOnClickListener(v -> {
 - **Original PDF Document (Module 6)**: [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf)
 - **Implicit Intents PDF Document (Module 7)**: [`docs/Materi_Mobile_7.pdf`](docs/Materi_Mobile_7.pdf)
 - **GitHub Repository**: [https://github.com/jasonhukom/NextSentAndroid](https://github.com/jasonhukom/NextSentAndroid)
+=======
+Built for learning Android development, one Intent at a time.
+>>>>>>> c96a232c627c3639338edb7d3ac789aaf2397c82
