@@ -21,7 +21,8 @@ The lecture slides document is attached in [`docs/Materi_Mobile_6.pdf`](docs/Mat
    - [2.2 Activity 1 (`MainActivity`) Layout & Code](#22-activity-1-mainactivity-layout--code)
    - [2.3 Activity 2 (`SecondActivity`) Layout & Code](#23-activity-2-secondactivity-layout--code)
    - [2.4 Two-Way Message Flow Summary](#24-two-way-message-flow-summary)
-3. [Codebase Reference & Build Guide](#codebase-reference--build-guide)
+3. [Catatan Activity & Intent: Cara Activity 2 Mengirim Balasan ke Activity 1](#catatan-activity--intent-cara-activity-2-mengirim-balasan-ke-activity-1)
+4. [Codebase Reference & Build Guide](#codebase-reference--build-guide)
 
 ---
 
@@ -487,6 +488,88 @@ public class SecondActivity extends AppCompatActivity {
    │  [TextView] ◄────────(onActivityResult / Reply Display)     │
    └─────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+# Catatan Activity & Intent: Cara Activity 2 Mengirim Balasan ke Activity 1
+
+### 1. Konsep Dasar
+Intent digunakan untuk berpindah dari satu Activity ke Activity lainnya sekaligus membawa data atau pesan.
+- **Activity 1 (`MainActivity`)**: tempat pengguna mengetik dan mengirim pesan.
+- **Activity 2 (`SecondActivity`)**: menerima pesan dari Activity 1 dan menyediakan kolom untuk menulis balasan.
+
+---
+
+### 2. Menambahkan Komponen di Activity 2
+Pada file `activity_second.xml`, tambahkan:
+- **`TextView`**: untuk menampilkan pesan yang diterima.
+- **`EditText`**: untuk mengetik balasan.
+- **`Button`**: untuk mengirim balasan.
+
+**Contoh ID komponen:**
+```xml
+android:id="@+id/text_message"
+android:id="@+id/editTextReply"
+android:id="@+id/buttonReply"
+```
+> **Catatan:** ID pada XML harus sama persis dengan ID yang dipanggil di Java.
+
+---
+
+### 3. Memanggil Komponen di `SecondActivity.java`
+Tambahkan kode berikut di dalam method `onCreate()`, setelah `setContentView()`:
+```java
+TextView textMessage = findViewById(R.id.text_message);
+EditText editTextReply = findViewById(R.id.editTextReply);
+Button buttonReply = findViewById(R.id.buttonReply);
+```
+Kode `findViewById()` digunakan untuk menghubungkan komponen XML dengan kode Java.
+*Jangan lupa menambahkan import `TextView`, `EditText`, dan `Button`.*
+
+---
+
+### 4. Mengambil Pesan yang Diterima
+```java
+String message = getIntent().getStringExtra(
+    MainActivity.EXTRA_MESSAGE
+);
+if (message != null) {
+    textMessage.setText(message);
+}
+```
+`getIntent()` mengambil Intent yang membuka Activity 2, sedangkan `getStringExtra()` mengambil pesan berdasarkan key `EXTRA_MESSAGE`.
+
+---
+
+### 5. Mengirim Balasan ke Activity 1
+Letakkan kode berikut setelah kode untuk mengambil pesan, masih di dalam `onCreate()`:
+```java
+buttonReply.setOnClickListener(v -> {
+    String reply = editTextReply.getText().toString().trim();
+    if (reply.isEmpty()) {
+        editTextReply.setError("Tulis balasan terlebih dahulu");
+        return;
+    }
+    Intent intent = new Intent(
+        SecondActivity.this,
+        MainActivity.class
+    );
+    intent.putExtra(MainActivity.EXTRA_MESSAGE, reply);
+    startActivity(intent);
+});
+```
+
+---
+
+### 6. Alur Pengiriman Pesan
+1. Pengguna mengetik pesan di Activity 1.
+2. Activity 1 mengirim pesan ke Activity 2 melalui `Intent` dan `putExtra()`.
+3. Activity 2 menerima pesan dengan `getStringExtra()`.
+4. Pengguna mengetik balasan di Activity 2.
+5. Activity 2 mengirim balasan ke Activity 1 menggunakan `Intent` dan `putExtra()`.
+6. Activity 1 mengambil dan menampilkan balasan tersebut.
+
+> **Kesimpulan:** Agar Activity 2 bisa mengirim balasan, kita membutuhkan kolom `EditText`, tombol `Button`, `Intent`, `putExtra()`, dan `startActivity()`. Activity 1 juga harus mengambil pesan balasan yang diterima agar dapat menampilkannya.
 
 ---
 
