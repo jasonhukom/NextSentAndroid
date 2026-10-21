@@ -10,14 +10,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SecondActivity extends AppCompatActivity {
 
     private EditText editTextReply;
     private TextView textHistory;
     private ImageButton buttonTheme;
-    private SwitchCompat switchActivity;
+    private SwitchMaterial switchActivity;
     private String historyText = "";
 
     @Override
@@ -33,6 +33,15 @@ public class SecondActivity extends AppCompatActivity {
         Button buttonReply = findViewById(R.id.buttonReply);
         buttonTheme = findViewById(R.id.buttonTheme);
         switchActivity = findViewById(R.id.switchActivity);
+
+        editTextReply.requestFocus();
+        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        editTextReply.post(() -> {
+            android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(editTextReply, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
 
         updateThemeIcon();
 
@@ -77,6 +86,20 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (editTextReply != null) {
+            editTextReply.requestFocus();
+            editTextReply.post(() -> {
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(editTextReply, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+        }
+    }
+
     // Called when clicking Kirim (android:onClick="returnReply")
     public void returnReply(View view) {
         String reply = editTextReply.getText().toString().trim();
@@ -93,7 +116,7 @@ public class SecondActivity extends AppCompatActivity {
         if (historyText.length() > 0) {
             historyText += "\n";
         }
-        historyText += "SecondActivity: " + reply;
+        historyText += "Person 2: " + reply;
         textHistory.setText(historyText);
 
         Intent replyIntent = new Intent();

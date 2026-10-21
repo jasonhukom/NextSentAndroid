@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editText;
     private TextView textHistory;
     private ImageButton buttonTheme;
-    private SwitchCompat switchActivity;
+    private SwitchMaterial switchActivity;
     private String historyText = "";
 
     @Override
@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         textHistory = findViewById(R.id.textHistory);
         buttonTheme = findViewById(R.id.buttonTheme);
         switchActivity = findViewById(R.id.switchActivity);
+
+        editText.requestFocus();
+        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         updateThemeIcon();
 
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             if (historyText.length() > 0) {
                 historyText += "\n";
             }
-            historyText += "MainActivity: " + input;
+            historyText += "Person 1: " + input;
             textHistory.setText(historyText);
 
             Intent intent = new Intent(this, SecondActivity.class);

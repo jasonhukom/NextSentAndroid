@@ -32,7 +32,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.SwitchCompat
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchActivity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,7 +76,9 @@
         android:layout_toLeftOf="@id/button"
         android:layout_alignParentBottom="true"
         android:hint="@string/hint_enter_message"
-        android:inputType="text" />
+        android:inputType="text">
+        <requestFocus />
+    </EditText>
 
     <Button
         android:id="@+id/button"

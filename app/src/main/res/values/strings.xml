@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NextSent Android</string>
-    <string name="title_main_activity">MainActivity</string>
-    <string name="title_second_activity">SecondActivity</string>
+    <string name="title_main_activity">Person 1</string>
+    <string name="title_second_activity">Person 2</string>
     <string name="button_send">SEND</string>
     <string name="button_kirim">Kirim</string>
     <string name="hint_enter_message">Masukkan Pesan Anda</string>
