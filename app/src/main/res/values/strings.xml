@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NextSent Android</string>
+    <string name="button_send">SEND</string>
+    <string name="button_reply">REPLY</string>
+    <string name="header_shop_food">- NextSent -</string>
+    <string name="hint_enter_text">Enter Message</string>
+    <string name="hint_enter_reply">Enter Reply</string>
+    <string name="button_open_web">OPEN WEBSITE</string>
+    <string name="text_header_reply">Reply Received:</string>
+    <string name="text_header_received">Message Received:</string>
+</resources>

@@ -1,0 +1,36 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_foreground
+id button
+id buttonReply
+id buttonWeb
+id editTextReply
+id editTextText
+id layoutReceived
+id layoutReply
+id textViewHeader
+id textViewMessage
+id textViewMessageHeader
+id textViewReply
+id textViewReplyHeader
+layout activity_main
+layout activity_second
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string button_open_web
+string button_reply
+string button_send
+string header_shop_food
+string hint_enter_reply
+string hint_enter_text
+string text_header_received
+string text_header_reply
+style Theme.NextSentAndroid
