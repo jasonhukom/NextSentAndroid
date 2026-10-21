@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".SecondActivity">
 
     <!-- Area for displaying Message received from MainActivity -->
     <LinearLayout
@@ -29,28 +31,23 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <!-- Bottom input row for returning Reply Extra to MainActivity -->
-    <LinearLayout
+    <!-- RelativeLayout Bottom Input Controls matching Module screenshot -->
+    <EditText
+        android:id="@+id/editTextReply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/buttonReply"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:hint="@string/hint_enter_reply"
+        android:inputType="text" />
 
-        <EditText
-            android:id="@+id/editTextReply"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:hint="@string/hint_enter_reply"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/buttonReply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_reply" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/buttonReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="returnReply"
+        android:text="@string/button_reply" />
 
 </RelativeLayout>
