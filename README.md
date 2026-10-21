@@ -1,8 +1,8 @@
 # NextSent Android - Complete Learning & Implementation Guide
 
-Welcome to **NextSent Android**! This repository serves as both a complete theoretical guide and a practical implementation project for **Module 1 (Activities & Intents Lecture)** and **Module 2 (Facebook-Style Two-Way Messaging Project)**.
+Welcome to **NextSent Android**! This repository serves as both a complete theoretical guide and a practical implementation project for **Module 1 (Activities & Intents)**, **Module 2 (Facebook-Style Two-Way Messaging Project)**, and **Module 3 (Implicit Intents & Intent Filters)**.
 
-The lecture slides document is attached in [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf).
+The lecture slides documents are attached in [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf) and [`docs/Materi_Mobile_7.pdf`](docs/Materi_Mobile_7.pdf).
 
 ---
 
@@ -21,8 +21,15 @@ The lecture slides document is attached in [`docs/Materi_Mobile_6.pdf`](docs/Mat
    - [2.2 Activity 1 (`MainActivity`) Layout & Code](#22-activity-1-mainactivity-layout--code)
    - [2.3 Activity 2 (`SecondActivity`) Layout & Code](#23-activity-2-secondactivity-layout--code)
    - [2.4 Two-Way Message Flow Summary](#24-two-way-message-flow-summary)
-3. [Catatan Activity & Intent: Cara Activity 2 Mengirim Balasan ke Activity 1](#catatan-activity--intent-cara-activity-2-mengirim-balasan-ke-activity-1)
-4. [Codebase Reference & Build Guide](#codebase-reference--build-guide)
+3. [MODULE 3: Implicit Intents & Intent Filters (Materi Mobile 7)](#module-3-implicit-intents--intent-filters-materi-mobile-7)
+   - [3.1 What is an Implicit Intent? (Slides 1–6)](#31-what-is-an-implicit-intent-slides-16)
+   - [3.2 How Implicit Intents Work & App Chooser (Slides 7–8)](#32-how-implicit-intents-work--app-chooser-slides-78)
+   - [3.3 Sending Implicit Intents Safely (`resolveActivity`) (Slides 9–10)](#33-sending-implicit-intents-safely-resolveactivity-slides-910)
+   - [3.4 Sending Implicit Intents with Data URIs & Extras (Slides 11–14)](#34-sending-implicit-intents-with-data-uris--extras-slides-1114)
+   - [3.5 Common Intent Actions & System Handlers (Slides 15–16)](#35-common-intent-actions--system-handlers-slides-1516)
+   - [3.6 Registering Apps to Receive Implicit Intents via Intent Filters (Slides 17–22)](#36-registering-apps-to-receive-implicit-intents-via-intent-filters-slides-1722)
+4. [Catatan Activity & Intent: Cara Activity 2 Mengirim Balasan ke Activity 1](#catatan-activity--intent-cara-activity-2-mengirim-balasan-ke-activity-1)
+5. [Codebase Reference & Build Guide](#codebase-reference--build-guide)
 
 ---
 
@@ -491,6 +498,156 @@ public class SecondActivity extends AppCompatActivity {
 
 ---
 
+# MODULE 3: Implicit Intents & Intent Filters (Materi Mobile 7)
+
+### 3.1 What is an Implicit Intent? (Slides 1–6)
+- **Definition**: An **Implicit Intent** is a messaging object that describes an operation to be performed without specifying the exact target Activity class.
+- **Purpose**: Allows your app to request actions from other applications installed on the device (e.g., share text/photos, open web links, view maps, take photos, or dial phone numbers).
+- **Explicit vs. Implicit Intents**:
+  | Feature | Explicit Intent | Implicit Intent |
+  | :--- | :--- | :--- |
+  | **Target** | Specified target class in the same app. | Any installed app registered to handle the action. |
+  | **Use Case** | Navigating between app screens. | Leveraging system capabilities or third-party apps. |
+  | **Example** | `new Intent(this, SecondActivity.class)` | `new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))` |
+
+---
+
+### 3.2 How Implicit Intents Work & App Chooser (Slides 7–8)
+
+```
+┌────────────────────┐     ┌─────────────────────┐     ┌──────────────────────┐     ┌───────────────────────┐
+│ 1. Originator App  │ ──► │ 2. Android Runtime  │ ──► │ 3. Match Registered  │ ──► │ 4. Open App Chooser   │
+│    Sends Intent    │     │    Receives Request │     │    Intent Filters    │     │    or Launch App      │
+└────────────────────┘     └─────────────────────┘     └──────────────────────┘     └───────────────────────┘
+```
+
+1. **App Registration**: Applications register their capabilities by declaring `<intent-filter>` elements in `AndroidManifest.xml`.
+2. **Runtime Resolution**: When an implicit intent is sent, the Android Runtime checks all registered intent filters across the system.
+3. **App Chooser**:
+   - If **one app** matches, Android launches that activity directly.
+   - If **multiple apps** match, Android displays the **App Chooser** dialog, allowing the user to pick their preferred handler (e.g. Chrome vs. Firefox).
+
+---
+
+### 3.3 Sending Implicit Intents Safely (`resolveActivity`) (Slides 9–10)
+
+> [!WARNING]
+> Always verify that a matching activity exists before calling `startActivity()`. If no app on the device can handle the intent, your application will crash with an `ActivityNotFoundException`.
+
+```java
+// Create implicit intent
+Intent intent = new Intent(Intent.ACTION_CALL_BUTTON);
+
+// Prevent crashes by checking if a handler exists
+if (intent.resolveActivity(getPackageManager()) != null) {
+    startActivity(intent);
+}
+```
+
+---
+
+### 3.4 Sending Implicit Intents with Data URIs & Extras (Slides 11–14)
+
+#### 1. Passing Data URIs (`setData` / `Uri.parse`)
+- **Open Web Page**:
+  ```java
+  Uri webUri = Uri.parse("http://www.google.com");
+  Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+  if (webIntent.resolveActivity(getPackageManager()) != null) {
+      startActivity(webIntent);
+  }
+  ```
+- **Phone Dialer**:
+  ```java
+  Uri phoneUri = Uri.parse("tel:8005551234");
+  Intent dialIntent = new Intent(Intent.ACTION_DIAL, phoneUri);
+  if (dialIntent.resolveActivity(getPackageManager()) != null) {
+      startActivity(dialIntent);
+  }
+  ```
+- **Geo Location / Maps**:
+  ```java
+  Uri mapUri = Uri.parse("geo:0,0?q=brooklyn%20bridge%2C%20brooklyn%2C%20ny");
+  Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+  if (mapIntent.resolveActivity(getPackageManager()) != null) {
+      startActivity(mapIntent);
+  }
+  ```
+
+#### 2. Passing Extras (`putExtra`)
+- **Web Search**:
+  ```java
+  Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
+  searchIntent.putExtra(SearchManager.QUERY, "Android Development");
+  if (searchIntent.resolveActivity(getPackageManager()) != null) {
+      startActivity(searchIntent);
+  }
+  ```
+
+---
+
+### 3.5 Common Intent Actions & System Handlers (Slides 15–16)
+
+#### Frequently Used System Actions:
+- `ACTION_VIEW`: View web pages, contacts, or media.
+- `ACTION_DIAL`: Open phone dialer with pre-filled number.
+- `ACTION_WEB_SEARCH`: Perform a web search.
+- `ACTION_SEND` / `ACTION_SENDTO`: Send text, media, or emails.
+- `ACTION_IMAGE_CAPTURE`: Capture a photo using the system camera.
+- `ACTION_CREATE_DOCUMENT`: Create/save files in system storage.
+- `ACTION_SET_ALARM`: Set an alarm or timer in the clock app.
+
+---
+
+### 3.6 Registering Apps to Receive Implicit Intents via Intent Filters (Slides 17–22)
+
+To enable your app to receive implicit intents from other apps or system components, declare one or more `<intent-filter>` elements inside an `<activity>` tag in `AndroidManifest.xml`.
+
+#### 3 Key Elements of an `<intent-filter>`:
+1. **`<action>`**: Matches one or more intent actions (e.g. `android.intent.action.VIEW`, `android.intent.action.SEND`).
+2. **`<category>`**: Categorizes the activity:
+   - `android.intent.category.DEFAULT`: Required for activities to receive implicit intents via `startActivity()`.
+   - `android.intent.category.BROWSABLE`: Allows activity to be started from a web browser.
+   - `android.intent.category.LAUNCHER`: Displays the activity as an app launcher icon.
+3. **`<data>`**: Filters data URIs and MIME types:
+   - `android:scheme="https"`: Requires HTTPS protocol URIs.
+   - `android:host="developer.android.com"`: Restricts acceptance to specific host domains.
+   - `android:mimeType="text/plain"`, `image/*`, or `video/*`: Restricts document/media MIME types.
+
+#### Single Intent Filter Example:
+```xml
+<activity android:name=".ShareActivity" android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
+    </intent-filter>
+</activity>
+```
+
+#### Multiple Intent Filters & Multiple Actions/Data Examples:
+```xml
+<activity android:name=".MediaShareActivity" android:exported="true">
+    <!-- Filter 1: Single Item Sharing -->
+    <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="image/*" />
+        <data android:mimeType="video/*" />
+    </intent-filter>
+
+    <!-- Filter 2: Multiple Item Sharing -->
+    <intent-filter>
+        <action android:name="android.intent.action.SEND_MULTIPLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="image/*" />
+        <data android:mimeType="video/*" />
+    </intent-filter>
+</activity>
+```
+
+---
+
 # Catatan Activity & Intent: Cara Activity 2 Mengirim Balasan ke Activity 1
 
 ### 1. Konsep Dasar
@@ -578,5 +735,6 @@ buttonReply.setOnClickListener(v -> {
 - **App Manifest**: [`app/src/main/AndroidManifest.xml`](app/src/main/AndroidManifest.xml)
 - **Main Screen**: [`app/src/main/java/com/nextsent/android/MainActivity.java`](app/src/main/java/com/nextsent/android/MainActivity.java)
 - **Second Screen**: [`app/src/main/java/com/nextsent/android/SecondActivity.java`](app/src/main/java/com/nextsent/android/SecondActivity.java)
-- **Original PDF Document**: [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf)
+- **Original PDF Document (Module 6)**: [`docs/Materi_Mobile_6.pdf`](docs/Materi_Mobile_6.pdf)
+- **Implicit Intents PDF Document (Module 7)**: [`docs/Materi_Mobile_7.pdf`](docs/Materi_Mobile_7.pdf)
 - **GitHub Repository**: [https://github.com/jasonhukom/NextSentAndroid](https://github.com/jasonhukom/NextSentAndroid)
