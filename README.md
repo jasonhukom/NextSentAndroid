@@ -1,5 +1,4 @@
-# NextSent Android
-
+<h1 align="center"> NextSent Android </h1>
 <p align="center">
   <strong>A hands-on Android project for learning Activities, Intents, and two-way message passing.</strong>
   <br />
