@@ -163,7 +163,7 @@ The PDFs are included as course references. The app itself focuses on the two-Ac
 
 ## Author
 
-**Jason Hukom**
+**Jason Christopher Hukom**
 
 ---
 
