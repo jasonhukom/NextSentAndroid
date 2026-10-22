@@ -148,8 +148,8 @@ If the build succeeds, Gradle generates a debug APK under `app/build/outputs/apk
 
 ## Learning Resources
 
-- [Module 1 and Module 2: Activities, Intents, and two-way messaging](docs/Materi_Mobile_6.pdf)
-- [Module 3: Implicit Intents and intent filters](docs/Materi_Mobile_7.pdf)
+- [Module 6: Activities, Intents, and two-way messaging](docs/Materi_Mobile_6.pdf)
+- [Module 7: Implicit Intents and intent filters](docs/Materi_Mobile_7.pdf)
 - [Android source code](https://github.com/jasonhukom/NextSentAndroid)
 
 The PDFs are included as course references. The app itself focuses on the two-Activity message-passing demonstration; the implicit Intent and intent-filter concepts are covered by the learning materials.
