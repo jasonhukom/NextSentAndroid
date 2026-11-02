@@ -1,13 +1,19 @@
-# NextSent Android
+# NextSent — The Self-Messaging Social Network
 
-A WhatsApp-inspired **local messaging simulator** built with Java, Android SDK, and an embedded HTML/CSS/JavaScript interface.
+> **For the unemployed, the jobless, and the beautifully unoccupied.** No coworkers? No problem. Message yourself. Create group chats with yourself. Have a meeting with yourself. Finally, someone who understands you.
 
-NextSent is a standalone demo. It does not connect to WhatsApp, send real network messages, or place real phone calls.
+NextSent is a tongue-in-cheek messaging app for people with plenty of free time and absolutely nobody demanding a status update. It is a playful, local messaging simulator: your contacts are fictional, your conversations stay on your device, and you can switch between multiple accounts to hold a lively discussion with yourself.
+
+**Tagline:** Your time is free. Your inbox doesn't have to be empty.
+
+## Version 2.0.0
+
+This release introduces the WhatsApp-inspired NextSent redesign, with a familiar chat-first layout and NextSent branding.
 
 ## Features
 
 - Familiar chat list with search across contacts and message history.
-- Multiple selectable local accounts. Each account's sent messages appear as messages from that account in shared contact conversations.
+- Multiple selectable local accounts. Each account's messages appear in shared contact conversations, so you can stage a conversation between your own accounts.
 - Preset fictional contacts and locally created groups.
 - Profile name and About editing.
 - Chat threads with simulated text, attachment labels, audio placeholders, and Google Maps location links.
@@ -19,13 +25,14 @@ NextSent is a standalone demo. It does not connect to WhatsApp, send real networ
 
 ## Important limitations
 
-- Messages and accounts are stored only on this device/browser storage; there is no backend, real delivery, encryption, or cross-device sync.
+- This is a local simulator, not a real messaging service. It does not connect to WhatsApp or deliver messages to other people.
+- Messages and accounts are stored only in this app's local WebView storage; there is no backend, real delivery, end-to-end encryption, or cross-device sync.
 - Contact names are fictional sample data, not real people or imported contacts.
-- Image/audio/document attachments are represented by local demo labels; files are not uploaded or delivered to another person.
+- Image/audio/document attachments are represented by local demo labels; files are not uploaded or delivered.
 - Camera launch opens the device camera app, but captured photos are not yet imported into a chat.
 - Calls are sound-and-screen simulations only. No person is actually called.
-- Profile photos and full WhatsApp-level media handling are not implemented yet.
-- The interface is inspired by common WhatsApp interaction patterns but uses NextSent branding and original assets.
+- Profile photo selection and full WhatsApp-level media handling are not implemented.
+- The interface is inspired by common messaging-app interaction patterns while retaining NextSent branding and original assets.
 
 ## Build
 
@@ -43,19 +50,20 @@ macOS/Linux:
 ./gradlew assembleDebug
 ```
 
-The debug APK is generated at app/build/outputs/apk/debug/app-debug.apk.
+The debug APK is generated at `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## Project structure
 
-- app/src/main/java/com/nextsent/android/MainActivity.java — Android activity and native camera/maps bridge.
-- app/src/main/assets/index.html — NextSent interface and local simulator logic.
-- app/src/main/AndroidManifest.xml — app declaration and launcher activity.
-- app/src/main/res/layout/activity_main.xml — WebView host layout.
+- `app/src/main/java/com/nextsent/android/MainActivity.java` — Android activity and native camera/maps bridge.
+- `app/src/main/assets/index.html` — NextSent interface and local simulator logic.
+- `app/src/main/AndroidManifest.xml` — app declaration and launcher activity.
+- `app/src/main/res/layout/activity_main.xml` — WebView host layout.
 
 ## Tech
 
 - Java 17
 - Android SDK 36
 - Android Gradle Plugin 9.0.1
+- Gradle 9.1.0
 - WebView with local HTML, CSS and JavaScript
 - LocalStorage for simulator data
