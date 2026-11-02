@@ -1,120 +1,78 @@
 package com.nextsent.android;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static final String EXTRA_MESSAGE = "com.nextsent.android.MESSAGE";
-    public static final String EXTRA_HISTORY = "com.nextsent.android.HISTORY";
-    public static final int TEXT_REQUEST = 1;
-
-    private EditText editText;
-    private TextView textHistory;
-    private ImageButton buttonTheme;
-    private SwitchMaterial switchActivity;
-    private String historyText = "";
+    private static final int CAMERA_REQUEST = 42;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Apply persistent theme before setContentView
-        ThemeManager.applyTheme(this);
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        getWindow().setStatusBarColor(android.graphics.Color.rgb(0, 128, 105));
+        getWindow().setNavigationBarColor(android.graphics.Color.rgb(248, 249, 250));
+        getWindow().getDecorView().setSystemUiVisibility(0);
+        webView = new WebView(this);
+        webView.setBackgroundColor(android.graphics.Color.rgb(248, 249, 250));
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClient());
+        webView.addJavascriptInterface(new NextSentBridge(), "NextSentNative");
+        setContentView(webView);
+        webView.loadUrl("file:///android_asset/index.html");
+    }
 
-        editText = findViewById(R.id.editText);
-        textHistory = findViewById(R.id.textHistory);
-        buttonTheme = findViewById(R.id.buttonTheme);
-        switchActivity = findViewById(R.id.switchActivity);
-
-        editText.requestFocus();
-        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        updateThemeIcon();
-
-        // Persistent theme toggle on button click
-        buttonTheme.setOnClickListener(v -> {
-            boolean isDark = ThemeManager.isDarkMode(MainActivity.this);
-            ThemeManager.setDarkMode(MainActivity.this, !isDark);
-            updateThemeIcon();
-        });
-
-        // Switch to SecondActivity when switch is toggled
-        switchActivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                    intent.putExtra(EXTRA_HISTORY, historyText);
-                    startActivityForResult(intent, TEXT_REQUEST);
+    private class NextSentBridge {
+        @JavascriptInterface
+        public void openCamera() {
+            runOnUiThread(() -> {
+                try {
+                    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, CAMERA_REQUEST);
+                    } else {
+                        Toast.makeText(MainActivity.this, "No camera app is available.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Could not open camera.", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
+        }
 
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(EXTRA_HISTORY)) {
-            String updatedHistory = intent.getStringExtra(EXTRA_HISTORY);
-            if (updatedHistory != null) {
-                historyText = updatedHistory;
-                textHistory.setText(historyText);
-            }
+        @JavascriptInterface
+        public void openMap(String query) {
+            runOnUiThread(() -> {
+                Uri uri = Uri.parse("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(query));
+                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            });
         }
     }
 
-    private void updateThemeIcon() {
-        if (ThemeManager.isDarkMode(this)) {
-            buttonTheme.setImageResource(R.drawable.ic_sun);
-        } else {
-            buttonTheme.setImageResource(R.drawable.ic_moon);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (switchActivity != null) {
-            switchActivity.setChecked(false);
-        }
-    }
-
-    // Called when clicking SEND (android:onClick="openSecondActivity")
-    public void openSecondActivity(View view) {
-        String input = editText.getText().toString().trim();
-        if (!input.isEmpty()) {
-            if (historyText.length() > 0) {
-                historyText += "\n";
-            }
-            historyText += "Person 1: " + input;
-            textHistory.setText(historyText);
-
-            Intent intent = new Intent(this, SecondActivity.class);
-            intent.putExtra(EXTRA_MESSAGE, input);
-            intent.putExtra(EXTRA_HISTORY, historyText);
-            startActivityForResult(intent, TEXT_REQUEST);
-
-            editText.setText("");
-        }
-    }
-
-    // Receives returned reply data from SecondActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Toast.makeText(this, "Photo captured. Attachments are simulated in this demo.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        if (requestCode == TEXT_REQUEST && resultCode == RESULT_OK && data != null) {
-            String updatedHistory = data.getStringExtra(EXTRA_HISTORY);
-            if (updatedHistory != null && !updatedHistory.isEmpty()) {
-                historyText = updatedHistory;
-                textHistory.setText(historyText);
-            }
+    @Override
+    public void onBackPressed() {
+        if (webView != null) {
+            webView.evaluateJavascript("if(window.nextSentBack){window.nextSentBack();}else{history.back();}", null);
+        } else {
+            super.onBackPressed();
         }
     }
 }
