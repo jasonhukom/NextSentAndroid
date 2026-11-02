@@ -10,8 +10,8 @@ android {
         applicationId = "com.nextsent.android"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.1.0"
+        versionCode = 200
+        versionName = "2.0.0"
     }
 
     buildTypes {
