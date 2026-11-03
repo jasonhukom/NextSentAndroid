@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String EXTRA_HISTORY = "com.nextsent.android.EXTRA_HISTORY";
     private static final int CAMERA_REQUEST = 42;
     private WebView webView;
 
