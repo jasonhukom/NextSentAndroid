@@ -1,127 +1,130 @@
 package com.nextsent.android;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
 
-    private EditText editTextReply;
-    private TextView textHistory;
-    private ImageButton buttonTheme;
-    private SwitchMaterial switchActivity;
-    private String historyText = "";
+    public static final String EXTRA_CONTACT_NAME = "com.nextsent.android.CONTACT_NAME";
+
+    private String contactName = "Contact";
+    private TextView threadAvatar, threadName;
+    private LinearLayout messagesContainer, attachMenu;
+    private EditText messageInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Apply persistent theme before setContentView
-        ThemeManager.applyTheme(this);
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
-
-        textHistory = findViewById(R.id.textHistory);
-        editTextReply = findViewById(R.id.editTextReply);
-        Button buttonReply = findViewById(R.id.buttonReply);
-        buttonTheme = findViewById(R.id.buttonTheme);
-        switchActivity = findViewById(R.id.switchActivity);
-
-        editTextReply.requestFocus();
-        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        editTextReply.post(() -> {
-            android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(editTextReply, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-        updateThemeIcon();
-
-        // Persistent theme toggle on button click
-        buttonTheme.setOnClickListener(v -> {
-            boolean isDark = ThemeManager.isDarkMode(SecondActivity.this);
-            ThemeManager.setDarkMode(SecondActivity.this, !isDark);
-            updateThemeIcon();
-        });
-
-        // Switch back to MainActivity when switch is untoggled
-        switchActivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    Intent replyIntent = new Intent();
-                    replyIntent.putExtra(MainActivity.EXTRA_HISTORY, historyText);
-                    setResult(RESULT_OK, replyIntent);
-                    finish();
-                }
-            }
-        });
+        setContentView(R.layout.activity_chat_thread);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(MainActivity.EXTRA_HISTORY)) {
-            String passedHistory = intent.getStringExtra(MainActivity.EXTRA_HISTORY);
-            if (passedHistory != null) {
-                historyText = passedHistory;
-                textHistory.setText(historyText);
+        if (intent != null && intent.hasExtra(EXTRA_CONTACT_NAME)) {
+            contactName = intent.getStringExtra(EXTRA_CONTACT_NAME);
+        }
+
+        threadAvatar = findViewById(R.id.threadAvatar);
+        threadName = findViewById(R.id.threadName);
+        messagesContainer = findViewById(R.id.messagesContainer);
+        attachMenu = findViewById(R.id.attachMenu);
+        messageInput = findViewById(R.id.messageInput);
+
+        threadName.setText(contactName);
+        threadAvatar.setText(getInitials(contactName));
+
+        ImageButton buttonCloseThread = findViewById(R.id.buttonCloseThread);
+        buttonCloseThread.setOnClickListener(v -> finish());
+
+        ImageButton buttonStartCall = findViewById(R.id.buttonStartCall);
+        buttonStartCall.setOnClickListener(v -> {
+            Intent callIntent = new Intent(SecondActivity.this, CallActivity.class);
+            callIntent.putExtra(CallActivity.EXTRA_CALL_NAME, contactName);
+            startActivity(callIntent);
+        });
+
+        ImageButton buttonToggleAttach = findViewById(R.id.buttonToggleAttach);
+        buttonToggleAttach.setOnClickListener(v -> {
+            if (attachMenu.getVisibility() == View.VISIBLE) {
+                attachMenu.setVisibility(View.GONE);
+            } else {
+                attachMenu.setVisibility(View.VISIBLE);
+            }
+        });
+
+        findViewById(R.id.buttonAttachPhoto).setOnClickListener(v -> sendAttachment("Photo"));
+        findViewById(R.id.buttonAttachAudio).setOnClickListener(v -> sendAttachment("Audio"));
+        findViewById(R.id.buttonAttachLocation).setOnClickListener(v -> sendAttachment("Location"));
+        findViewById(R.id.buttonAttachDocument).setOnClickListener(v -> sendAttachment("Document"));
+
+        findViewById(R.id.buttonSendMessage).setOnClickListener(v -> {
+            String text = messageInput.getText().toString().trim();
+            if (!text.isEmpty()) {
+                DataManager.getInstance().addMessage(contactName, text);
+                messageInput.setText("");
+                renderMessages();
+            }
+        });
+
+        renderMessages();
+    }
+
+    private void sendAttachment(String type) {
+        attachMenu.setVisibility(View.GONE);
+        if ("Location".equals(type)) {
+            DataManager.getInstance().addMessage(contactName, "📍 Location: Shared Location — https://maps.google.com");
+        } else {
+            DataManager.getInstance().addMessage(contactName, "📎 " + type + " attachment (demo)");
+        }
+        renderMessages();
+    }
+
+    private void renderMessages() {
+        messagesContainer.removeAllViews();
+        List<ChatMessage> list = DataManager.getInstance().getThread(contactName);
+        String currentAcc = DataManager.getInstance().getCurrentAccount();
+
+        for (ChatMessage msg : list) {
+            boolean isOut = msg.getFrom().equals(currentAcc);
+
+            View bubbleView = getLayoutInflater().inflate(R.layout.item_message_bubble, messagesContainer, false);
+            LinearLayout msgBubble = bubbleView.findViewById(R.id.msgBubble);
+            TextView msgText = bubbleView.findViewById(R.id.msgText);
+            TextView msgStamp = bubbleView.findViewById(R.id.msgStamp);
+
+            msgText.setText(msg.getText());
+            msgStamp.setText(msg.getTime() + (isOut ? " ✓✓" : ""));
+
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) msgBubble.getLayoutParams();
+            if (isOut) {
+                lp.gravity = Gravity.END;
+                msgBubble.setBackgroundColor(Color.parseColor("#D9FDD3"));
+            } else {
+                lp.gravity = Gravity.START;
+                msgBubble.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            }
+            msgBubble.setLayoutParams(lp);
+
+            messagesContainer.addView(bubbleView);
+        }
+    }
+
+    private String getInitials(String name) {
+        if (name == null || name.isEmpty()) return "?";
+        String[] parts = name.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < Math.min(parts.length, 2); i++) {
+            if (!parts[i].isEmpty()) {
+                sb.append(parts[i].charAt(0));
             }
         }
-
-        // Called when clicking Kirim button
-        buttonReply.setOnClickListener(v -> returnReply(v));
-    }
-
-    private void updateThemeIcon() {
-        if (ThemeManager.isDarkMode(this)) {
-            buttonTheme.setImageResource(R.drawable.ic_sun);
-        } else {
-            buttonTheme.setImageResource(R.drawable.ic_moon);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (editTextReply != null) {
-            editTextReply.requestFocus();
-            editTextReply.post(() -> {
-                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.showSoftInput(editTextReply, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
-                }
-            });
-        }
-    }
-
-    // Called when clicking Kirim (android:onClick="returnReply")
-    public void returnReply(View view) {
-        String reply = editTextReply.getText().toString().trim();
-
-        if (reply.isEmpty()) {
-            Toast.makeText(
-                    SecondActivity.this,
-                    "Pesan tidak boleh kosong",
-                    Toast.LENGTH_SHORT
-            ).show();
-            return;
-        }
-
-        if (historyText.length() > 0) {
-            historyText += "\n";
-        }
-        historyText += "Person 2: " + reply;
-        textHistory.setText(historyText);
-
-        Intent replyIntent = new Intent();
-        replyIntent.putExtra(MainActivity.EXTRA_HISTORY, historyText);
-        setResult(RESULT_OK, replyIntent);
-        finish();
+        return sb.toString().toUpperCase();
     }
 }

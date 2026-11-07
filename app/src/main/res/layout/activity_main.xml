@@ -1,13 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    android:background="@color/whatsapp_bg"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <WebView
-        android:id="@+id/nextSentWebView"
+    <!-- Top WhatsApp Header Bar -->
+    <LinearLayout
+        android:id="@+id/mainTop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="62dp"
+        android:background="@color/whatsapp_green"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/buttonTopProfile"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/ic_launcher_foreground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="J"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/brandTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:text="NextSent"
+            android:textColor="@color/white"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/buttonCamera"
+            android:layout_width="34dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Camera"
+            android:src="@android:drawable/ic_menu_camera"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/buttonSearch"
+            android:layout_width="34dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Search"
+            android:src="@android:drawable/ic_menu_search"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/buttonSettings"
+            android:layout_width="34dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:src="@android:drawable/ic_menu_more"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <!-- Navigation Tabs Bar (CHATS, STATUS, CALLS) -->
+    <LinearLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:background="@color/whatsapp_green"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/tabChats"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="CHATS"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/tabStatus"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="STATUS"
+            android:textColor="#CCE5DF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/tabCalls"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="CALLS"
+            android:textColor="#CCE5DF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Optional Search Input Bar -->
+    <LinearLayout
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="9dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/whatsapp_bg"
+            android:hint="Search chats or messages"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:padding="11dp"
+            android:textColor="@color/whatsapp_text"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Main Screens Container -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Screen 1: Chats Screen -->
+        <RelativeLayout
+            android:id="@+id/chatsScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chatList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabNewGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="22dp"
+                android:contentDescription="Create group"
+                android:src="@android:drawable/ic_input_add"
+                app:backgroundTint="@color/whatsapp_light_green"
+                app:tint="@color/white" />
+        </RelativeLayout>
+
+        <!-- Screen 2: Status Screen -->
+        <ScrollView
+            android:id="@+id/statusScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/whatsapp_bg"
+                    android:paddingStart="16dp"
+                    android:paddingTop="17dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="7dp"
+                    android:text="My status"
+                    android:textColor="@color/whatsapp_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/rowMyStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/myStatusAvatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="J"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="My status"
+                            android:textColor="@color/whatsapp_text"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tap to add status update"
+                            android:textColor="@color/whatsapp_muted"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/whatsapp_bg"
+                    android:paddingStart="16dp"
+                    android:paddingTop="17dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="7dp"
+                    android:text="Recent updates"
+                    android:textColor="@color/whatsapp_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/statusContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Screen 3: Calls Screen -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/callsScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>
