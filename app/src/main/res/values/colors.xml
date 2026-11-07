@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- NextSent WhatsApp UI Colors from index.html -->
+    <color name="whatsapp_green">#008069</color>
+    <color name="whatsapp_dark_green">#075E54</color>
+    <color name="whatsapp_light_green">#00A884</color>
+    <color name="whatsapp_bg">#F0F2F5</color>
+    <color name="whatsapp_bubble">#D9FDD3</color>
+    <color name="whatsapp_incoming">#FFFFFF</color>
+    <color name="whatsapp_text">#111B21</color>
+    <color name="whatsapp_muted">#667781</color>
+    <color name="whatsapp_line">#E9EDEF</color>
+    <color name="whatsapp_chat_bg">#E9E5DC</color>
 </resources>
